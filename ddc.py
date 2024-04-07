@@ -12,7 +12,7 @@ if uploaded_file is not None:
         st.dataframe(third_column_data)
 
         # 定义用户选择行的交互
-        selected_indices = st.multiselect("选择要查看详情的行", third_column_data['index'])
+        selected_indices = st.multiselect("选择要查看详情的index", third_column_data['index'])
         for selected_index in selected_indices:
             st.write(data.loc[selected_index, :])
 else:
