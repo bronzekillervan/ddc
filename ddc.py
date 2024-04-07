@@ -43,10 +43,10 @@ if uploaded_file is not None:
                                 value=data.loc[st.session_state['edit_row_index'], column] if st.session_state.get('edit', False) else "")
                 submit_button = st.form_submit_button(label='submit')
                 if submit_button:
-                   if st.session_state.get('edit', False):
-                       st.session_state.data.loc[st.session_state['edit_row_index']] = pd.Series(new_data)
-                   elif st.session_state.get('add', False):
-                       st.session_state.data = st.session_state.data.append(pd.Series(new_data), ignore_index=True)
+                    if st.session_state.get('edit', False):
+                        st.session_state.data.loc[st.session_state['edit_row_index']] = pd.Series(new_data)
+                    elif st.session_state.get('add', False):
+                        st.session_state.data = st.session_state.data.append(pd.Series(new_data), ignore_index=True)
                     st.session_state['add'] = False
                     st.session_state['edit'] = False
                     st.session_state['edit_row_index'] = None
