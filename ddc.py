@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-data=pd.read_csv(r'C:\Users\Lenovo\Desktop\LF_caps.cvs')
-if st.checkbox('Show dataframe'):
-  st.write(data)
+uploaded_file = st.file_uploader("选择一个文件")
+if uploaded_file is not None:
+    data = pd.read_csv(uploaded_file)
+    st.write(data)
