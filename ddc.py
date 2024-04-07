@@ -19,7 +19,7 @@ if st.session_state['init']:
 
 # 当用户点击继续后，显示文件上传器和数据操作界面
 if not st.session_state['init']:
-    uploaded_file = st.file_uploader("请选择一个文件")
+    uploaded_file = st.file_uploader("Please upload a csv file.")
     if uploaded_file is not None:
         # 确保会话状态中的数据是最新的
         if 'data' not in st.session_state or st.session_state.uploaded_file_name != uploaded_file.name:
@@ -33,21 +33,21 @@ if not st.session_state['init']:
             third_column_data['index'] = third_column_data.index
             
             st.dataframe(third_column_data)
-            selected_indices = st.multiselect("选择行索引", third_column_data['index'])
+            selected_indices = st.multiselect("Choose an index", third_column_data['index'])
 
             for selected_index in selected_indices:
                 st.write(data.loc[selected_index, :])
                 col1, col2, col3 = st.columns(3)
                 with col1:
-                    if st.button('编辑', key=f'edit_{selected_index}'):
+                    if st.button('edit', key=f'edit_{selected_index}'):
                         st.session_state['edit_row_index'] = selected_index
                         st.session_state['edit'] = True
                 with col2:
-                    if st.button('删除', key=f'del_{selected_index}'):
+                    if st.button('delete', key=f'del_{selected_index}'):
                         st.session_state.data = st.session_state.data.drop(index=selected_index)
                         st.session_state.data.reset_index(drop=True, inplace=True)
                 with col3:
-                    if st.button('添加', key=f'add_{selected_index}'):
+                    if st.button('add', key=f'add_{selected_index}'):
                         st.session_state['add'] = True
             
             if st.session_state.get('add', False) or st.session_state.get('edit', False):
@@ -55,8 +55,8 @@ if not st.session_state['init']:
                     new_data = {}
                     for column in data.columns:
                         default_value = data.loc[st.session_state['edit_row_index'], column] if st.session_state.get('edit', False) else ""
-                        new_data[column] = st.text_input(f"输入 {column}", value=default_value)
-                    submit_button = st.form_submit_button(label='提交')
+                        new_data[column] = st.text_input(f"type {column}", value=default_value)
+                    submit_button = st.form_submit_button(label='submit')
                     if submit_button:
                         if st.session_state.get('edit', False):
                             st.session_state.data.loc[st.session_state['edit_row_index']] = pd.Series(new_data)
@@ -69,4 +69,4 @@ if not st.session_state['init']:
 
             st.write(st.session_state.data)
     else:
-        st.write("请上传CSV文件。")
+        st.write("Upload a file.")
