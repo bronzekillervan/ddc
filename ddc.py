@@ -11,7 +11,9 @@ if 'init' not in st.session_state:
     st.session_state['init'] = True  # 初始状态为True，显示欢迎页面
 
 if st.session_state['init']:
-    st.image('path_to_image.jpg', caption='孩子们，我回来了')
+    # 使用GitHub图片的URL（确保URL是公开的）
+    github_image_url = 'https://github.com/bronzekillervan/ddc/blob/main/203d909c2f8e428ec1828d27b0cca0b.png?raw=true'
+    st.image(github_image_url, caption='孩子们，我回来了')
     if st.button('牢大，想你了！！'):
         st.session_state['init'] = False  # 用户点击后，不再显示欢迎页面
 
@@ -25,7 +27,7 @@ if not st.session_state['init']:
             st.session_state.uploaded_file_name = uploaded_file.name
 
         data = st.session_state.data
-
+        
         if len(data.columns) > 1:
             third_column_data = data.iloc[:, 1].to_frame()
             third_column_data['index'] = third_column_data.index
