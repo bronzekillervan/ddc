@@ -7,6 +7,7 @@ def load_data(uploaded_file):
 
 uploaded_file = st.file_uploader("请选择一个文件")
 if uploaded_file is not None:
+    # 确保会话状态中的数据是最新的
     if 'data' not in st.session_state or st.session_state.uploaded_file_name != uploaded_file.name:
         st.session_state.data = load_data(uploaded_file)
         st.session_state.uploaded_file_name = uploaded_file.name
@@ -29,6 +30,7 @@ if uploaded_file is not None:
                     st.session_state['edit'] = True
             with col2:
                 if st.button('delete', key=f'del_{selected_index}'):
+                    # 直接在session state中操作删除
                     st.session_state.data = st.session_state.data.drop(index=selected_index)
                     st.session_state.data.reset_index(drop=True, inplace=True)
             with col3:
@@ -39,18 +41,24 @@ if uploaded_file is not None:
             with st.form(key='edit_add_form'):
                 new_data = {}
                 for column in data.columns:
-                    new_data[column] = st.text_input(f"input {column}", 
-                                value=data.loc[st.session_state['edit_row_index'], column] if st.session_state.get('edit', False) else "")
+                    default_value = data.loc[st.session_state['edit_row_index'], column] if st.session_state.get('edit', False) else ""
+                    new_data[column] = st.text_input(f"input {column}", value=default_value)
                 submit_button = st.form_submit_button(label='submit')
                 if submit_button:
                     if st.session_state.get('edit', False):
+                        # 直接在session state中操作编辑
                         st.session_state.data.loc[st.session_state['edit_row_index']] = pd.Series(new_data)
                     elif st.session_state.get('add', False):
-                        st.session_state.data = st.session_state.data.append(pd.Series(new_data), ignore_index=True)
+                        # 在session state中操作添加
+                        # 创建一个新的DataFrame来添加数据
+                        new_row = pd.DataFrame([new_data], columns=data.columns)
+                        st.session_state.data = pd.concat([st.session_state.data, new_row], ignore_index=True)
+                    # 重置添加和编辑的标志
                     st.session_state['add'] = False
                     st.session_state['edit'] = False
                     st.session_state['edit_row_index'] = None
 
+        # 最后，确保展示的是session state中的最新数据
         st.write(st.session_state.data)
 else:
     st.write("请上传CSV文件。")
