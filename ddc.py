@@ -4,9 +4,9 @@ import pandas as pd
 uploaded_file = st.file_uploader("请选择一个文件")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
-    if len(data.columns) > 2:
+    if len(data.columns) > 1:
         # 创建一个临时的DataFrame来显示第三列
-        third_column_data = data.iloc[:, 2].to_frame()
+        third_column_data = data.iloc[:, 1].to_frame()
         third_column_data['index'] = third_column_data.index
         # 展示第三列的数据
         st.dataframe(third_column_data)
