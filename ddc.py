@@ -8,11 +8,9 @@ if uploaded_file is not None:
     if len(data.columns) >= 3:
         third_column_data = data.iloc[:, 2]
         st.write(third_column_data)
-         placeholder = st.empty()
-         for index, value in third_column_data.items():
-            # 生成唯一的key for each button
+        placeholder = st.empty()
+        for index, value in third_column_data.items():
             if st.button(f"{value}", key=index):
-                # 显示该行的所有信息
                 placeholder.write(data.iloc[index, :])
 else:
     st.write("请上传CSV文件。")
