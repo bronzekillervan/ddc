@@ -15,8 +15,8 @@ if st.session_state['init']:
     github_image_url = 'https://github.com/bronzekillervan/ddc/blob/main/203d909c2f8e428ec1828d27b0cca0b.png?raw=true'
     st.image(github_image_url, caption='孩子们，我回来了')
     if st.button('牢大，想你了！！'):
-        st.session_state['init'] = False  # 用户点击后，不再显示欢迎页面
-
+        st.session_state['init'] = False  # 用户点击后，切换状态
+        st.experimental_rerun()  # 强制重新运行应用
 # 当用户点击继续后，显示文件上传器和数据操作界面
 if not st.session_state['init']:
     uploaded_file = st.file_uploader("请选择一个文件")
