@@ -48,7 +48,7 @@ def draw_routes(df):
     tooltip = {
         "html": "<b>运输信息:</b> {info}",
         "style": {
-            "backgroundColor": "steelblue",
+            "backgroundColor": "pink",
             "color": "white"
         }
     }
