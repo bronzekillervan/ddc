@@ -7,54 +7,52 @@ st.title('路线绘制应用')
 # 文件上传器
 uploaded_file = st.file_uploader("请选择表格文件", type=['csv', 'xlsx'])
 
-def draw_route(df):
-    # 筛选出有有效经纬度的行
+def draw_routes(df):
+    # 仅选择包含有效经纬度数据的行
     valid_routes = df.dropna(subset=['pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng'])
 
-    # 创建路径数据
+    # 创建路径数据，每一行是一个字典，包含起点和终点的经纬度坐标
     routes = [
-        {
-            "start": [row['pickup_lng'], row['pickup_lat']],
-            "end": [row['receiving_lng'], row['receiving_lat']],
-        } for index, row in valid_routes.iterrows()
+        {"coordinates": [[row['pickup_lng'], row['pickup_lat']], 
+                         [row['receiving_lng'], row['receiving_lat']]]}
+        for _, row in valid_routes.iterrows()
     ]
 
-    # 创建路径图层
+    # 创建pydeck的PathLayer
     layer = pdk.Layer(
         "PathLayer",
         routes,
+        get_path="coordinates",
+        get_width=5,
+        get_color=[255, 140, 0],
         pickable=True,
-        get_path=lambda d: d['start'] + d['end'],  
-        width_scale=20,
-        width_min_pixels=2,
-        get_color="[255, 140, 0]",
-        width_units="pixels",
+        width_scale=10
     )
 
-    # 设置视图
+    # 设置初始视图状态
     view_state = pdk.ViewState(
         latitude=valid_routes['pickup_lat'].mean(),
         longitude=valid_routes['pickup_lng'].mean(),
-        zoom=10
+        zoom=6
     )
 
-    # 渲染地图
-    st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state, map_style='mapbox://styles/mapbox/light-v9'))
+    # 用pydeck渲染地图
+    st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
 
 if uploaded_file is not None:
-    # 根据文件类型读取数据
     if uploaded_file.name.endswith('.csv'):
         df = pd.read_csv(uploaded_file)
     elif uploaded_file.name.endswith('.xlsx'):
         df = pd.read_excel(uploaded_file)
 
-    # 检查是否包含必要的列
+    # 检查必要的列是否存在
     if all(col in df.columns for col in ['pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng']):
-        draw_route(df)
+        draw_routes(df)
     else:
-        st.error('表格中没有找到必要的列。需要有 "pickup_lat", "pickup_lng", "receiving_lat", 和 "receiving_lng"。')
+        st.error('表格中没有找到必要的列。')
 else:
     st.info('请上传文件以绘制路线。')
+
 
 
 
