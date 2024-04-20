@@ -32,7 +32,7 @@ def draw_routes(df):
         get_target_position="to_coordinates",
         get_width=5,
         get_tilt=15,  # 控制弧线的倾斜度
-        get_color=[255, 182, 193，255],  # 粉色弧线的RGB颜色代码
+        get_color=[255, 182, 193,255],  # 粉色弧线的RGB颜色代码
         pickable=True,
         auto_highlight=True,
     )
