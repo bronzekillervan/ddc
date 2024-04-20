@@ -27,19 +27,19 @@ if uploaded_file is not None:
         df = pd.read_excel(uploaded_file)
 
     # 确保pickup和receive地址列存在
-    if 'pickup address' in df.columns and 'receive address' in df.columns:
+    if 'pickup_address' in df.columns and 'receive_address' in df.columns:
         # 应用地理编码函数到地址列
-        df['pickup_coords'] = df['pickup address'].apply(geocode_address)
-        df['receive_coords'] = df['receive address'].apply(geocode_address)
+        df['pickup_coords'] = df['pickup_address'].apply(geocode_address)
+        df['receive_coords'] = df['receive_address'].apply(geocode_address)
 
         # 显示结果
-        st.dataframe(df[['pickup address', 'pickup_coords', 'receive address', 'receive_coords']])
+        st.dataframe(df[['pickup_address', 'pickup_coords', 'receive_address', 'receive_coords']])
         
         # 在地图上显示起点和终点（假设geocode_address函数返回了有效的经纬度）
         for index, row in df.iterrows():
             if row['pickup_coords'] and row['receive_coords']:
                 st.map([row['pickup_coords'], row['receive_coords']])
     else:
-        st.error('表格中没有找到正确的地址列。请确保您的表格中包含"pickup address"和"receive address"列。')
+        st.error('表格中没有找到正确的地址列。请确保您的表格中包含"pickup_address"和"receive_address"列。')
 else:
     st.info('请上传一个文件来开始。')
