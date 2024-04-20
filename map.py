@@ -19,19 +19,19 @@ def draw_route(df):
         } for index, row in valid_routes.iterrows()
     ]
 
-    # 设置地图图层
+    # 创建路径图层
     layer = pdk.Layer(
-        type="PathLayer",
-        data=routes,
+        "PathLayer",
+        routes,
         pickable=True,
-        get_path="data",
+        get_path="d => d.start.concat(d.end)",  # 更新此处以正确引用数据字段
         width_scale=20,
         width_min_pixels=2,
         get_color="[255, 140, 0]",
         width_units="pixels",
     )
 
-    # 设置地图视图
+    # 设置视图
     view_state = pdk.ViewState(
         latitude=valid_routes['pickup_lat'].mean(),
         longitude=valid_routes['pickup_lng'].mean(),
@@ -39,13 +39,13 @@ def draw_route(df):
     )
 
     # 渲染地图
-    st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state))
+    st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state, map_style='mapbox://styles/mapbox/light-v9'))
 
 if uploaded_file is not None:
     # 根据文件类型读取数据
     if uploaded_file.name.endswith('.csv'):
         df = pd.read_csv(uploaded_file)
-    else:
+    elif uploaded_file.name.endswith('.xlsx'):
         df = pd.read_excel(uploaded_file)
 
     # 检查是否包含必要的列
@@ -55,5 +55,6 @@ if uploaded_file is not None:
         st.error('表格中没有找到必要的列。需要有 "pickup_lat", "pickup_lng", "receiving_lat", 和 "receiving_lng"。')
 else:
     st.info('请上传文件以绘制路线。')
+
 
 
