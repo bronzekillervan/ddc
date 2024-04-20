@@ -24,7 +24,7 @@ def draw_route(df):
         "PathLayer",
         routes,
         pickable=True,
-        get_path="d => d.start.concat(d.end)",  # 更新此处以正确引用数据字段
+        get_path=lambda d: d['start'] + d['end'],  
         width_scale=20,
         width_min_pixels=2,
         get_color="[255, 140, 0]",
