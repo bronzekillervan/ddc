@@ -2,10 +2,11 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
+# 设置页面标题
 st.title('立体弧线路线绘制应用')
 
-# 文件上传器
-uploaded_file = st.file_uploader("请选择表格文件", type=['csv', 'xlsx'])
+# GitHub文件的直接链接
+file_url = 'https://raw.githubusercontent.com/yourusername/yourrepo/branch/path/to/yourfile.csv'
 
 def draw_routes(df):
     # 仅选择包含有效经纬度数据的行
@@ -32,7 +33,7 @@ def draw_routes(df):
         get_target_position="to_coordinates",
         get_width=5,
         get_tilt=15,  # 控制弧线的倾斜度
-        get_color=[255, 182, 193,255],  # 粉色弧线的RGB颜色代码
+        get_color=[255, 182, 193, 255],  # 粉色弧线的RGB颜色代码，包括透明度
         pickable=True,
         auto_highlight=True,
     )
@@ -48,7 +49,7 @@ def draw_routes(df):
     tooltip = {
         "html": "<b>运输信息:</b> {info}",
         "style": {
-            "backgroundColor": "pink",
+            "backgroundColor": "steelblue",
             "color": "white"
         }
     }
@@ -58,23 +59,17 @@ def draw_routes(df):
         layers=[layer],
         initial_view_state=view_state,
         tooltip=tooltip,
-        map_style='mapbox://styles/mapbox/light-v10'  # 使用Mapbox的浅色地图样式
+        map_style='mapbox://styles/mapbox/light-v10'
     ))
 
-if uploaded_file is not None:
-    # 根据文件类型读取数据
-    if uploaded_file.name.endswith('.csv'):
-        df = pd.read_csv(uploaded_file)
-    elif uploaded_file.name.endswith('.xlsx'):
-        df = pd.read_excel(uploaded_file)
+# 从GitHub URL读取CSV文件
+df = pd.read_csv(file_url)
 
-    # 检查必要的列是否存在
-    if {'type_debris', 'waste_quantity', 'pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng', 'pickup_name', 'pickup_address', 'generator_name', 'generator_address'}.issubset(df.columns):
-        draw_routes(df)
-    else:
-        st.error('表格中没有找到必要的列。')
+# 检查必要的列是否存在并开始绘制路线
+if {'type_debris', 'waste_quantity', 'pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng', 'pickup_name', 'pickup_address', 'generator_name', 'generator_address'}.issubset(df.columns):
+    draw_routes(df)
 else:
-    st.info('请上传文件以绘制路线。')
+    st.error('表格中没有找到必要的列。')
 
 
 
