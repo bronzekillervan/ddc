@@ -5,8 +5,8 @@ import pydeck as pdk
 # 设置页面标题
 st.title('立体弧线路线绘制应用')
 
-# GitHub文件的直接链接
-file_url = 'https://github.com/bronzekillervan/ddc/blob/main/cdw_csv_sample.csv'
+# GitHub文件的直接链接（确保链接是指向原始内容的）
+file_url = 'https://raw.githubusercontent.com/bronzekillervan/ddc/main/cdw_csv_sample.csv'
 
 def draw_routes(df):
     # 仅选择包含有效经纬度数据的行
@@ -70,7 +70,6 @@ if {'type_debris', 'waste_quantity', 'pickup_lat', 'pickup_lng', 'receiving_lat'
     draw_routes(df)
 else:
     st.error('表格中没有找到必要的列。')
-
 
 
 
