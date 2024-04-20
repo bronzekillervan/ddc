@@ -6,7 +6,7 @@ import pydeck as pdk
 st.title('立体弧线路线绘制应用')
 
 # GitHub文件的直接链接
-file_url = 'https://raw.githubusercontent.com/yourusername/yourrepo/branch/path/to/yourfile.csv'
+file_url = 'https://github.com/bronzekillervan/ddc/blob/main/cdw_csv_sample.csv'
 
 def draw_routes(df):
     # 仅选择包含有效经纬度数据的行
