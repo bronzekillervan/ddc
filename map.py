@@ -51,7 +51,7 @@ def draw_routes(df):
     tooltip = {
         "html": "{info}",  
         "style": {
-            "backgroundColor": "steelblue",
+            "backgroundColor": "pink",
             "color": "white"
         }
     }
