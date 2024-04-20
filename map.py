@@ -32,7 +32,7 @@ def draw_routes(df):
         get_target_position="to_coordinates",
         get_width=5,
         get_tilt=15,  # 控制弧线的倾斜度
-        get_color=[255, 140, 0],
+        get_color=[255, 192, 203],  # 粉色弧线的RGB颜色代码
         pickable=True,
         auto_highlight=True,
     )
@@ -57,7 +57,8 @@ def draw_routes(df):
     st.pydeck_chart(pdk.Deck(
         layers=[layer],
         initial_view_state=view_state,
-        tooltip=tooltip
+        tooltip=tooltip,
+        map_style='mapbox://styles/mapbox/light-v10'  # 使用Mapbox的浅色地图样式
     ))
 
 if uploaded_file is not None:
