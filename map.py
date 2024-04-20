@@ -17,7 +17,7 @@ def draw_routes(df):
             "coordinates": [[row['pickup_lng'], row['pickup_lat']], 
                             [row['receiving_lng'], row['receiving_lat']]],
             # 添加详细信息到Tooltip
-            "info": f"Type of Debris: {row['type_debris']}, Waste Load: {row['waste_load']}, "
+            "info": f"Type of Debris: {row['type_debris']}, Waste Quantity: {row['waste_quantity']}, "
                     f"Pickup Name: {row['pickup_name']}, Pickup Address: {row['pickup_address']}, "
                     f"Generator Name: {row['generator_name']}, Generator Address: {row['generator_address']}"
         }
@@ -67,7 +67,7 @@ if uploaded_file is not None:
         df = pd.read_excel(uploaded_file)
 
     # 检查必要的列是否存在
-    if {'type_debris', 'waste_load', 'pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng', 'pickup_name', 'pickup_address', 'generator_name', 'generator_address'}.issubset(df.columns):
+    if {'type_debris', 'waste_quantity', 'pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng', 'pickup_name', 'pickup_address', 'generator_name', 'generator_address'}.issubset(df.columns):
         draw_routes(df)
     else:
         st.error('表格中没有找到必要的列。')
