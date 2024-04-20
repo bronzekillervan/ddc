@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
-# 设置页面标题
 st.title('DDC Mapping program')
 
 file_url = 'https://raw.githubusercontent.com/bronzekillervan/ddc/main/cdw_csv_sample.csv'
