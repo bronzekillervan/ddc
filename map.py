@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 
-st.title('路线绘制应用')
+st.title('立体弧线路线绘制应用')
 
 # 文件上传器
 uploaded_file = st.file_uploader("请选择表格文件", type=['csv', 'xlsx'])
@@ -14,8 +14,8 @@ def draw_routes(df):
     # 创建包含所有运输信息的路径数据
     routes = [
         {
-            "coordinates": [[row['pickup_lng'], row['pickup_lat']], 
-                            [row['receiving_lng'], row['receiving_lat']]],
+            "from_coordinates": [row['pickup_lng'], row['pickup_lat']],
+            "to_coordinates": [row['receiving_lng'], row['receiving_lat']],
             # 添加详细信息到Tooltip
             "info": f"Type of Debris: {row['type_debris']}, Waste Quantity: {row['waste_quantity']}, "
                     f"Pickup Name: {row['pickup_name']}, Pickup Address: {row['pickup_address']}, "
@@ -24,16 +24,17 @@ def draw_routes(df):
         for _, row in valid_routes.iterrows()
     ]
 
-    # 创建pydeck的PathLayer
+    # 创建pydeck的ArcLayer
     layer = pdk.Layer(
-        "PathLayer",
+        "ArcLayer",
         routes,
-        get_path="coordinates",
+        get_source_position="from_coordinates",
+        get_target_position="to_coordinates",
         get_width=5,
+        get_tilt=15,  # 控制弧线的倾斜度
         get_color=[255, 140, 0],
         pickable=True,
         auto_highlight=True,
-        width_scale=10
     )
 
     # 设置初始视图状态
@@ -73,6 +74,7 @@ if uploaded_file is not None:
         st.error('表格中没有找到必要的列。')
 else:
     st.info('请上传文件以绘制路线。')
+
 
 
 
