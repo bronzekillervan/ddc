@@ -16,8 +16,10 @@ def draw_routes(df):
         {
             "coordinates": [[row['pickup_lng'], row['pickup_lat']], 
                             [row['receiving_lng'], row['receiving_lat']]],
-            # 您可以在这里添加任何额外的信息，用于在Tooltip中显示
-            "info": f"Debris: {row['type_debris']}, Load: {row['waste_load']}, Pickup: {row['pickup_address']}, Destination: {row['generator_address']}"
+            # 添加详细信息到Tooltip
+            "info": f"Type of Debris: {row['type_debris']}, Waste Load: {row['waste_load']}, "
+                    f"Pickup Name: {row['pickup_name']}, Pickup Address: {row['pickup_address']}, "
+                    f"Generator Name: {row['generator_name']}, Generator Address: {row['generator_address']}"
         }
         for _, row in valid_routes.iterrows()
     ]
@@ -43,7 +45,7 @@ def draw_routes(df):
 
     # 定义Tooltip
     tooltip = {
-        "html": "<b>运输信息:</b> {info}",  # 使用HTML标签来格式化显示的信息
+        "html": "<b>运输信息:</b> {info}",
         "style": {
             "backgroundColor": "steelblue",
             "color": "white"
@@ -51,24 +53,26 @@ def draw_routes(df):
     }
 
     # 用pydeck渲染地图
-    st.pydeck_chart(pdk.Deck(layers=[layer], 
-                              initial_view_state=view_state, 
-                              tooltip=tooltip))
+    st.pydeck_chart(pdk.Deck(
+        layers=[layer],
+        initial_view_state=view_state,
+        tooltip=tooltip
+    ))
 
 if uploaded_file is not None:
+    # 根据文件类型读取数据
     if uploaded_file.name.endswith('.csv'):
         df = pd.read_csv(uploaded_file)
     elif uploaded_file.name.endswith('.xlsx'):
         df = pd.read_excel(uploaded_file)
 
     # 检查必要的列是否存在
-    if all(col in df.columns for col in ['type_debris', 'waste_load', 'pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng', 'pickup_address', 'generator_address']):
+    if {'type_debris', 'waste_load', 'pickup_lat', 'pickup_lng', 'receiving_lat', 'receiving_lng', 'pickup_name', 'pickup_address', 'generator_name', 'generator_address'}.issubset(df.columns):
         draw_routes(df)
     else:
         st.error('表格中没有找到必要的列。')
 else:
     st.info('请上传文件以绘制路线。')
-
 
 
 
